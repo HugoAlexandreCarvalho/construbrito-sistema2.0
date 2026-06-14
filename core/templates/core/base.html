@@ -1,0 +1,56 @@
+{% load static %}<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>{% block title %}ConstruBrito{% endblock %}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            nav: '#0b1220',
+            navink: '#e5e7eb',
+            brand: { DEFAULT: '#1d4ed8', dark: '#1e40af' },
+            danger: '#b91c1c',
+          },
+          fontFamily: {
+            sans: ['IBM Plex Sans', 'Segoe UI', 'system-ui', 'sans-serif'],
+          },
+          borderRadius: { none: '0', DEFAULT: '0' },
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body class="bg-gray-100 text-gray-900 font-sans text-sm min-h-screen flex flex-col">
+  <header class="bg-nav text-navink border-b border-black">
+    <div class="max-w-[1200px] mx-auto px-4 sm:px-6 flex flex-wrap items-center justify-between gap-y-2 py-2 sm:h-14 sm:py-0">
+      <a class="text-white font-bold tracking-[.12em] text-lg no-underline" href="{% url 'dashboard' %}">
+        CONSTRU<span class="text-yellow-400">BRITO</span>
+      </a>
+      <nav class="flex flex-wrap gap-x-4 gap-y-1 w-full sm:w-auto">
+        {% with request.resolver_match.url_name as cur %}
+        <a href="{% url 'dashboard' %}"   class="text-navink hover:text-white uppercase text-xs tracking-[.08em] py-1.5 border-b-2 {% if cur == 'dashboard' %}border-yellow-400 text-white{% else %}border-transparent hover:border-yellow-400{% endif %}">Dashboard</a>
+        <a href="{% url 'produtos' %}"    class="text-navink hover:text-white uppercase text-xs tracking-[.08em] py-1.5 border-b-2 {% if cur == 'produtos' %}border-yellow-400 text-white{% else %}border-transparent hover:border-yellow-400{% endif %}">Produtos</a>
+        <a href="{% url 'categorias' %}"  class="text-navink hover:text-white uppercase text-xs tracking-[.08em] py-1.5 border-b-2 {% if cur == 'categorias' %}border-yellow-400 text-white{% else %}border-transparent hover:border-yellow-400{% endif %}">Categorias</a>
+        <a href="{% url 'clientes' %}"    class="text-navink hover:text-white uppercase text-xs tracking-[.08em] py-1.5 border-b-2 {% if cur == 'clientes' %}border-yellow-400 text-white{% else %}border-transparent hover:border-yellow-400{% endif %}">Clientes</a>
+        <a href="{% url 'vendas' %}"      class="text-navink hover:text-white uppercase text-xs tracking-[.08em] py-1.5 border-b-2 {% if cur == 'vendas' %}border-yellow-400 text-white{% else %}border-transparent hover:border-yellow-400{% endif %}">Vendas</a>
+        <a href="{% url 'contas' %}"      class="text-navink hover:text-white uppercase text-xs tracking-[.08em] py-1.5 border-b-2 {% if cur == 'contas' %}border-yellow-400 text-white{% else %}border-transparent hover:border-yellow-400{% endif %}">Contas</a>
+        {% endwith %}
+      </nav>
+    </div>
+    <div class="h-[3px]" style="background:linear-gradient(90deg,#1d4ed8 0 33%,#fff 33% 66%,#dc2626 66% 100%)"></div>
+  </header>
+  <main class="flex-1 w-full max-w-[1200px] mx-auto px-4 sm:px-6 pb-12">
+    {% block content %}{% endblock %}
+  </main>
+  <footer class="mt-auto border-t border-gray-200 bg-white">
+    <div class="max-w-[1200px] mx-auto px-4 sm:px-6 py-5 text-center text-gray-500">
+      <small>ConstruBrito &middot; Sistema de gestão</small>
+    </div>
+  </footer>
+</body>
+</html>

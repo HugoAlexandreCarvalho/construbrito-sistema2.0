@@ -1,0 +1,19 @@
+{% extends 'core/base.html' %}
+{% block content %}
+<h1 class="page-title">Categorias</h1>
+<form method="post" action="{% url 'categoria_create' %}" class="card form-inline">{% csrf_token %}
+  <input name="nome" placeholder="Nome" required>
+  <input name="descricao" placeholder="Descrição">
+  <button class="btn btn-primary">Adicionar</button>
+</form>
+<table class="table">
+  <thead><tr><th>Nome</th><th>Descrição</th><th></th></tr></thead>
+  <tbody>
+  {% for c in items %}
+    <tr><td>{{ c.nome }}</td><td>{{ c.descricao }}</td>
+      <td><form method="post" action="{% url 'categoria_delete' c.id %}">{% csrf_token %}
+        <button class="btn btn-danger">Excluir</button></form></td></tr>
+  {% empty %}<tr><td colspan="3" class="empty">Sem categorias.</td></tr>{% endfor %}
+  </tbody>
+</table>
+{% endblock %}

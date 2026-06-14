@@ -1,0 +1,34 @@
+{% extends 'core/base.html' %}
+{% block content %}
+<h1 class="page-title">Clientes</h1>
+<form method="post" action="{% url 'cliente_create' %}" class="card form-grid">{% csrf_token %}
+  <input name="nome" placeholder="Nome" required>
+  <input name="cpf_cnpj" placeholder="CPF/CNPJ">
+  <input name="telefone" placeholder="Telefone">
+  <input name="email" placeholder="E-mail">
+  <input name="endereco" placeholder="Endereço">
+  <input name="limite_credito" type="number" step="0.01" placeholder="Limite crédito">
+  <select name="status_credito">
+    <option value="novo">Novo</option>
+    <option value="bom_pagador">Bom pagador</option>
+    <option value="inadimplente">Inadimplente</option>
+    <option value="bloqueado">Bloqueado</option>
+  </select>
+  <button class="btn btn-primary">Adicionar cliente</button>
+</form>
+<table class="table">
+  <thead><tr><th>Nome</th><th>Documento</th><th>Telefone</th>
+    <th>Limite</th><th>Devedor</th><th>Disponível</th><th>Status</th><th></th></tr></thead>
+  <tbody>
+  {% for c in items %}
+    <tr>
+      <td>{{ c.nome }}</td><td>{{ c.cpf_cnpj }}</td><td>{{ c.telefone }}</td>
+      <td>R$ {{ c.limite_credito }}</td><td>R$ {{ c.saldo_devedor }}</td>
+      <td>R$ {{ c.credito_disponivel }}</td><td>{{ c.status_credito }}</td>
+      <td><form method="post" action="{% url 'cliente_delete' c.id %}">{% csrf_token %}
+        <button class="btn btn-danger">Excluir</button></form></td>
+    </tr>
+  {% empty %}<tr><td colspan="8" class="empty">Sem clientes.</td></tr>{% endfor %}
+  </tbody>
+</table>
+{% endblock %}

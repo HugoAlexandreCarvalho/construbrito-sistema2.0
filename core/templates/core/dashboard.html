@@ -1,0 +1,26 @@
+{% extends 'core/base.html' %}
+{% block content %}
+<h1 class="page-title">Visão Geral</h1>
+<section class="kpi-grid">
+  <div class="kpi kpi-blue"><span class="kpi-label">Produtos</span><strong>{{ stats.total_produtos|default:0 }}</strong></div>
+  <div class="kpi kpi-green"><span class="kpi-label">Clientes</span><strong>{{ stats.total_clientes|default:0 }}</strong></div>
+  <div class="kpi kpi-amber"><span class="kpi-label">Vendas</span><strong>{{ stats.total_vendas|default:0 }}</strong></div>
+  <div class="kpi kpi-red"><span class="kpi-label">Estoque Baixo</span><strong>{{ stats.estoque_baixo|default:0 }}</strong></div>
+  <div class="kpi"><span class="kpi-label">Faturado</span><strong>R$ {{ stats.total_faturado|default:"0.00" }}</strong></div>
+  <div class="kpi"><span class="kpi-label">A Receber</span><strong>R$ {{ stats.a_receber|default:"0.00" }}</strong></div>
+</section>
+
+<h2 class="section-title">Últimas vendas</h2>
+<table class="table">
+  <thead><tr><th>Código</th><th>Cliente</th><th>Total</th><th>Pagamento</th><th>Data</th></tr></thead>
+  <tbody>
+  {% for v in vendas %}
+    <tr><td>{{ v.codigo }}</td><td>{{ v.cliente_nome }}</td>
+        <td>R$ {{ v.total }}</td><td>{{ v.tipo_pagamento }}</td>
+        <td>{{ v.created_at|date:"d/m/Y H:i" }}</td></tr>
+  {% empty %}
+    <tr><td colspan="5" class="empty">Nenhuma venda registrada.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

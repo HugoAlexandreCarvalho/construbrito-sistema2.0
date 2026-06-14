@@ -1,0 +1,60 @@
+{% extends 'core/base.html' %}
+{% block content %}
+<h1 class="page-title">Vendas</h1>
+{% if erro %}<div class="alert alert-error">{{ erro }}</div>{% endif %}
+
+<form method="post" action="{% url 'venda_create' %}" class="card" id="form-venda">{% csrf_token %}
+  <div class="form-grid">
+    <select name="cliente_id" required>
+      <option value="">— Cliente —</option>
+      {% for c in clientes %}<option value="{{ c.id }}">{{ c.nome }}</option>{% endfor %}
+    </select>
+    <select name="tipo_pagamento" id="tipo_pagamento">
+      <option value="avista">À vista</option>
+      <option value="aprazo">A prazo</option>
+    </select>
+    <input name="parcelas" type="number" min="1" value="1">
+    <input name="desconto" type="number" step="0.01" placeholder="Desconto">
+  </div>
+
+  <h3 class="section-title">Itens</h3>
+  <div id="itens">
+    <div class="row-item">
+      <select name="produto_id[]">
+        <option value="">— Produto —</option>
+        {% for p in produtos %}<option value="{{ p.id }}" data-preco="{{ p.preco_venda }}">{{ p.nome }} (estoque: {{ p.estoque_atual }})</option>{% endfor %}
+      </select>
+      <input name="quantidade[]" type="number" step="0.001" placeholder="Qtd">
+      <input name="preco_praticado[]" type="number" step="0.01" placeholder="Preço">
+    </div>
+  </div>
+  <button type="button" class="btn" onclick="addItem()">+ Item</button>
+  <textarea name="observacoes" placeholder="Observações"></textarea>
+  <button class="btn btn-primary">Registrar venda</button>
+</form>
+
+<table class="table">
+  <thead><tr><th>Código</th><th>Cliente</th><th>Total</th><th>Pagamento</th><th>Data</th></tr></thead>
+  <tbody>
+  {% for v in items %}
+    <tr><td>{{ v.codigo }}</td><td>{{ v.cliente_nome }}</td>
+        <td>R$ {{ v.total }}</td><td>{{ v.tipo_pagamento }}</td>
+        <td>{{ v.created_at|date:"d/m/Y H:i" }}</td></tr>
+  {% empty %}<tr><td colspan="5" class="empty">Sem vendas.</td></tr>{% endfor %}
+  </tbody>
+</table>
+
+<script>
+function addItem(){
+  const c = document.getElementById('itens').firstElementChild.cloneNode(true);
+  c.querySelectorAll('input').forEach(i=>i.value='');
+  document.getElementById('itens').appendChild(c);
+}
+document.getElementById('itens').addEventListener('change', e=>{
+  if(e.target.name==='produto_id[]'){
+    const preco = e.target.selectedOptions[0]?.dataset.preco;
+    if(preco) e.target.parentElement.querySelector('input[name="preco_praticado[]"]').value = preco;
+  }
+});
+</script>
+{% endblock %}
