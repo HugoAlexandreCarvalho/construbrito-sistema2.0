@@ -52,6 +52,3 @@ core/static/css/        ← Estilos
 construbrito/settings.py← Sem auth/admin/ORM
 ```
 
-> Não há `models.py`, `migrations/` nem `manage.py migrate`.
-> Toda alteração de schema é feita editando `schema.sql`
-> (e recriando o volume com `docker compose down -v`).
